@@ -3,16 +3,18 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.*;
 
+import static java.lang.Math.max;
+
 public class LawnState{
     private List<LawnMowerAgent> agents;
 
-    private List<Message> globalMessages = new ArrayList<>();;
+    private List<Message> globalMessages = Collections.synchronizedList(new ArrayList<>());
 
     private static int height;
 
     private static int width;
 
-    private static int grassTiles = 15;
+    private int grassTiles = 0;
 
     //map tile types
     private static final int CLEAR = 0;
@@ -30,9 +32,10 @@ public class LawnState{
         LawnState s;
 
         s = new LawnState();
-        s.width = nrAgents;
-        s.height = nrAgents;
+        s.width = max(5, nrAgents);
+        s.height =max(5, nrAgents);
         s.map = initMap(s.width, s.height, 0.3);
+        s.grassTiles = countGrassTiles(s.map);
         s.agents = initAgents(nrAgents, s.map);
         return s;
     }
@@ -48,7 +51,6 @@ public class LawnState{
                     initMap[i][j] = OBSTACLE;
                 } else {
                     initMap[i][j] = GRASS;
-                    grassTiles++;
                 }
             }
         }
@@ -56,6 +58,17 @@ public class LawnState{
         return initMap;
     }
 
+    static int countGrassTiles(int[][] map){
+        int grassTiles = 0;
+        for(int i=0; i<map.length; i++){
+            for(int j = 0; j < map[0].length; j++){
+                if(map[i][j]==GRASS){
+                    grassTiles++;
+                }
+            }
+        }
+        return grassTiles;
+    }
     static List<LawnMowerAgent> initAgents(int nrAgents, int[][] map){
         List<LawnMowerAgent> initialAgents = new ArrayList<>();
         Random rand = new Random();
@@ -73,7 +86,7 @@ public class LawnState{
 
             if (map[x][y] != OBSTACLE && !positionTaken(initialAgents, x, y) && inBounds(x, y)) {
                 Position pos = new Position(x, y, 0);
-                LawnMowerAgent agent = new LawnMowerAgent(String.valueOf(id), pos, new ArrayList<>());
+                LawnMowerAgent agent = new LawnMowerAgent(String.valueOf(id), pos);
                 initialAgents.add(agent);
                 id +=1;
             }
@@ -128,6 +141,7 @@ public class LawnState{
     }
 
     void removeGrass(int x, int y){
+
         if(map[x][y] == GRASS){
             map[x][y] = CLEAR;
             grassTiles --;

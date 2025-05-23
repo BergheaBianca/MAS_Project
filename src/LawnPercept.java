@@ -21,7 +21,7 @@ public class LawnPercept {
 
         int viewX = x + Direction.DELTA_X[dir];
         int viewY = y + Direction.DELTA_Y[dir];
-        if (state.isObstacle(viewX, viewY))
+        if (LawnState.inBounds(viewX, viewY) && state.isObstacle(viewX, viewY))
             this.obstacle = true;
         else
             this.obstacle = false;

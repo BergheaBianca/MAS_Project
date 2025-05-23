@@ -28,6 +28,10 @@ public class Message {
         return new Position(this.x, this.y, 0);
     }
 
+    String getSenderId(){
+        return this.senderId;
+    }
+
     public String toString(){
         if(this.type == "mowed"){
             return "Mowed (" + this.x + ", "  + this.y + ")";
