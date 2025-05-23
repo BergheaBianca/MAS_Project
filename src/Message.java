@@ -6,7 +6,7 @@ public class Message {
 
     private int y;
 
-    private String senderId;
+    protected String senderId;
 
     public Message(String type, int x, int y, String senderId) {
         this.type = type;
@@ -16,7 +16,7 @@ public class Message {
     }
 
     String getType(){
-        if(type == "mowed"){
+        if(type.equals("mowed")){
             return "mow";
         }
         else{
@@ -25,7 +25,7 @@ public class Message {
     }
 
     Position getPosition(){
-        return new Position(this.x, this.y);
+        return new Position(this.x, this.y, 0);
     }
 
     public String toString(){

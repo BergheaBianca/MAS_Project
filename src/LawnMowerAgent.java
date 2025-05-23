@@ -5,69 +5,29 @@ public class LawnMowerAgent{
 
     private boolean grass;
 
-    private Position position;
-
     private boolean obstacle;
 
-    private List<Message> receivedMessages;
+    protected Position position;
 
-    public LawnMowerAgent(String id, boolean grass, boolean obstacle, Position position, List<Message> receivedMessages) {
+    List<Message> receivedMessages;
+
+    public LawnMowerAgent(String id, Position position, List<Message> receivedMessages) {
         this.id = id;
-        this.grass = grass;
-        this.obstacle = obstacle;
         this.position = position;
         this.receivedMessages = receivedMessages;
     }
 
     void see(LawnPercept p){
-        if(p.seeGrass()){
-            this.grass = true;
-        }
-        else{
-            this.grass = false;
-        }
-
-        if(p.seeObstacle()){
-            this.obstacle = true;
-        }
-        else{
-            this.obstacle = false;
-        }
+        this.grass = p.seeGrass();
+        this.obstacle = p.seeObstacle();
     }
 
     Action selectAction() {
         if (this.grass) {
             return new MowGrass();
         }
-        int[] directions = {0, 1, 2, 3};
 
-        for (int dir : directions) {
-            Position target = null;
-            Action moveAction = null;
-
-            switch (dir) {
-                case 0: // Up
-                    target = new Position(position.x - 1, position.y);
-                    moveAction = new TurnUp();
-                    break;
-                case 1: // Down
-                    target = new Position(position.x + 1, position.y);
-                    moveAction = new TurnDown();
-                    break;
-                case 2: // Left
-                    target = new Position(position.x, position.y - 1);
-                    moveAction = new TurnLeft();
-                    break;
-                case 3: // Right
-                    target = new Position(position.x, position.y + 1);
-                    moveAction = new TurnRight();
-                    break;
-            }
-
-            if (isOkToMove(target)) {
-                return moveAction;
-            }
-        }
+//        }
         return null;
     }
 
@@ -79,16 +39,15 @@ public class LawnMowerAgent{
 
     }
 
-    boolean isOkToMove(Position p){
-        for (Message m : this.receivedMessages) {
-            if (m.getType().equals("move")) {
-                Position target = m.getPosition();
-                if (target.equals(p)) {
-                    return false;
-                }
-            }
-        }
+    boolean equals(LawnMowerAgent a){
+        return this.getId() == a.getId();
+    }
 
-        return true;
+    Position getPosition(){
+        return this.position;
+    }
+
+    void setPosition(Position p){
+        this.position = p;
     }
 }

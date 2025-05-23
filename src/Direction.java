@@ -13,7 +13,6 @@ public class Direction {
      correspond to a step in the direction indexed. */
     public static final int[] DELTA_Y = new int[4];
 
-    /* static initializer for the DELTA_X and DELTA_Y arrays. */
     static {
         DELTA_X[NORTH] = 0;
         DELTA_X[EAST] = 1;
@@ -40,4 +39,5 @@ public class Direction {
                 return "INVALID";
         }
     }
+
 }

@@ -1,10 +1,19 @@
-import Action.Action;
-import Message.Message;
-
-public class SendMessage extends Action{
+public class SendMessage extends Action {
 
     private Message m;
-    public LawnState execute(LawnMowerAgent a, LawnState s) {
 
+    public SendMessage(Message m) {
+        this.m = m;
+    }
+
+    @Override
+    public LawnState execute(LawnMowerAgent sender, LawnState state) {
+        state.addMessage(m);
+        return state;
+    }
+
+    @Override
+    public String toString() {
+        return "SendMessage from " + m.senderId + ": " + m.toString();
     }
 }

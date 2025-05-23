@@ -5,11 +5,12 @@ public class LawnPercept {
 
     public LawnPercept(LawnState state, LawnMowerAgent agent) {
 
-        int x, y;
+        int x, y, dir;
 
         Position pos = state.getPosition(agent);
         x = pos.x;
         y = pos.y;
+        dir = pos.dir;
 
         if(state.hasGrass(x,y)){
             this.grass = true;
@@ -18,12 +19,12 @@ public class LawnPercept {
             this.grass = false;
         }
 
-        if(state.hasObstacle(x,y)){
+        int viewX = x + Direction.DELTA_X[dir];
+        int viewY = y + Direction.DELTA_Y[dir];
+        if (state.isObstacle(viewX, viewY))
             this.obstacle = true;
-        }
-        else{
+        else
             this.obstacle = false;
-        }
     }
 
     boolean seeGrass(){
