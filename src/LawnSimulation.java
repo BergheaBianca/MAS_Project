@@ -15,7 +15,7 @@ public class LawnSimulation{
 
         // Start threads for all agents
         for (LawnMowerAgent agent : initState.getAgents()) {
-            agent.setEnvironment(env); // If not passed in constructor
+            agent.setEnvironment(env);
             Thread t = new Thread(agent);
             threads.add(t);
             t.start();
@@ -25,18 +25,14 @@ public class LawnSimulation{
             env.currentState().display();
 
             try {
-                Thread.sleep(500); // display every 500ms
+                Thread.sleep(500);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
 
-        // Stop all agents
-        for (LawnMowerAgent agent : initState.getAgents()) {
-            agent.stop();
-        }
-
         System.out.println("END of simulation");
+        env.currentState().display();
     }
 
 

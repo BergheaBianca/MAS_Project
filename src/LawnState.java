@@ -34,7 +34,7 @@ public class LawnState{
         s = new LawnState();
         s.width = max(5, nrAgents);
         s.height =max(5, nrAgents);
-        s.map = initMap(s.width, s.height, 0.3);
+        s.map = initMap(s.width, s.height, 0.2);
         s.grassTiles = countGrassTiles(s.map);
         s.agents = initAgents(nrAgents, s.map);
         return s;
@@ -84,7 +84,7 @@ public class LawnState{
             int x = rand.nextInt(width);
             int y = rand.nextInt(height);
 
-            if (map[x][y] != OBSTACLE && !positionTaken(initialAgents, x, y) && inBounds(x, y)) {
+            if (map[x][y] != OBSTACLE && !positionTaken(initialAgents, x, y) && !isNearOtherAgent(initialAgents, x, y) && inBounds(x, y)) {
                 Position pos = new Position(x, y, 0);
                 LawnMowerAgent agent = new LawnMowerAgent(String.valueOf(id), pos);
                 initialAgents.add(agent);
@@ -99,6 +99,15 @@ public class LawnState{
         }
 
         return initialAgents;
+    }
+
+    private static boolean isNearOtherAgent(List<LawnMowerAgent> agents, int x, int y) {
+        for (LawnMowerAgent a : agents) {
+            int dx = Math.abs(a.position.x - x);
+            int dy = Math.abs(a.position.y - y);
+            if (dx <= 1 && dy <= 1) return true;
+        }
+        return false;
     }
 
     private static boolean positionTaken(List<LawnMowerAgent> agents, int x, int y) {
@@ -155,7 +164,7 @@ public class LawnState{
         return false;
     }
 
-    boolean isObstacle(int x, int y){
+    public static boolean isObstacle(int x, int y){
         if(map[x][y] == OBSTACLE){
             return true;
         }
