@@ -23,6 +23,8 @@ public class LawnState{
 
     private static final int OBSTACLE = 2;
 
+
+
     //map
     private static int[][] map;
     public LawnState(){
@@ -39,6 +41,8 @@ public class LawnState{
         s.agents = initAgents(nrAgents, s.map);
         return s;
     }
+
+
 
     static int[][] initMap(int mapWidth, int mapHeight, double obstacleRatio) {
         int[][] initMap = new int[mapWidth][mapHeight];
@@ -150,10 +154,14 @@ public class LawnState{
     }
 
     void removeGrass(int x, int y){
-
         if(map[x][y] == GRASS){
             map[x][y] = CLEAR;
             grassTiles --;
+            if(grassTiles == 0)
+            {
+                System.out.println("No more grass to remove! Done!");
+                display();
+            }
         }
     }
 
@@ -179,8 +187,7 @@ public class LawnState{
         return false;
     }
 
-    int getGrassTiles(){
-
+    public int getGrassTiles(){
         return grassTiles;
     }
 

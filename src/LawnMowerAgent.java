@@ -78,8 +78,11 @@ public class LawnMowerAgent implements  Runnable{
         }
 
         LawnState state = env.currentState();
-        List<Message> messages = state.getGlobalMessages();
-
+        List<Message> messages;
+        synchronized (state.getGlobalMessages()) {
+            messages = new ArrayList<>(state.getGlobalMessages());
+        }
+        System.out.println("Remaining Grass Tiles: " + state.getGrassTiles());
         List<Position> options = new ArrayList<>();
 
         for (int dir = 0; dir < 4; dir++) {
